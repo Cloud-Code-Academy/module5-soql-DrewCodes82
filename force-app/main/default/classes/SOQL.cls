@@ -102,9 +102,27 @@ public with sharing class SOQL {
 	 * @return A map of Task Ids to Task records.
 	 * Update the corresponding test class and testGetTasksDueNextWeek method to cover this method
 	 */
-	//[public | private ] [static] data_type method_name (input parameters) {
+	public static Map<Id, Task> tasksDueWithinAWeek () {
 	//  The body of the method
-	//}
+
+	// Declare the map
+	Map<Id, Task> taskIdToTask = new Map<Id, Task>();
+	// Create variables for today and the next week
+	Date today = Date.today();
+	Date nextWeek = today.addDays(7);
+	// Query to a list
+	List<Task> upcomingTasks = [SELECT Id, Subject, Status, ActivityDate
+								FROM Task
+								WHERE ActivityDate >= :today AND ActivityDate <= :nextWeek
+								WITH SECURITY_ENFORCED];
+	// Loop through the results and add them to the map with the Id as the Key
+	for (Task t : upcomingTasks) {
+		taskIdToTask.put(t.Id, t);
+	}
+	// Return the Map
+	return taskIdToTask;
+
+	}
 
 	/**
 	 * Question 7
