@@ -72,9 +72,15 @@ public with sharing class SOQL {
 	 * @return A list of Opportunities with important opportunities fields
 	 * Update the corresponding test class and testGetClosedWonOpportunityCountByAccount method to cover this method
 	 */
-	//[public | private ] [static] data_type method_name (input parameters) {
+	public static List<Opportunity> opportunitiesByAccountId (String accountId) {
 	//  The body of the method
-	//}
+		List<Opportunity> opps = [SELECT Id, Name, StageName, CloseDate, AccountId, Amount 
+								FROM Opportunity 
+								WHERE AccountId = :accountId
+								AND StageName = 'Closed Won'
+								WITH SECURITY_ENFORCED];
+		return opps;
+	}
 
 	/**
 	 * Question 5
