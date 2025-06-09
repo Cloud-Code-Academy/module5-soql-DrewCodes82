@@ -184,9 +184,17 @@ public with sharing class SOQL {
 	 * @return A list of Lead records.
 	 * Update the corresponding test class and testGetLeadsBySourceOrTitle method to cover this method
 	 */
-	//[public | private ] [static] data_type method_name (input parameters) {
+	public static List<Lead> getLeadsBySourceOrTitle (String source, String title) {
 	//  The body of the method
-	//}
+	String titleInput = '%' + title + '%';
+	List<Lead> leadsBySourceOrTitle = [SELECT Id, LastName, LeadSource, Title, Email, Company, Phone
+										FROM Lead
+										WHERE LeadSource = :source
+										OR Title LIKE :titleInput
+										WITH SECURITY_ENFORCED];
+		
+		return leadsBySourceOrTitle;
+	}
 
 	/**
 	 * Question 11
