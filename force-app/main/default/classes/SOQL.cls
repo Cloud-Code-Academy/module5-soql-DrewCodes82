@@ -275,7 +275,16 @@ public with sharing class SOQL {
 	 * @return A list of Contacts
 	 */
 	public static List<Contact> getBirthdateContacts() {
-		return null; // Replace null with the variable you used to store the result
+		Date today = Date.today();
+		
+		List<Contact> contactsByBirthdate = [SELECT Id, Name, FirstName, LastName, Birthdate
+											FROM Contact
+											WHERE Birthdate <= :today
+											WITH SECURITY_ENFORCED 
+											ORDER BY Birthdate DESC 
+											LIMIT 3];
+
+		return contactsByBirthdate; // Replace null with the variable you used to store the result
 	}
 
 	/**
