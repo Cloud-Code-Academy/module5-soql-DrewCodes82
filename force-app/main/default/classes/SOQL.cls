@@ -375,7 +375,11 @@ public with sharing class SOQL {
 	 * @return An Account record with related Opportunities.
 	 */
 	public static Account getAccountAndOpportunitiesFromAccountId(Id accountId) {
-		return null; // Replace null with the variable you used to store the result
+		Map<Id, Account> accountById = new Map<Id, Account>([SELECT Id, Name, (SELECT Name, StageName, CloseDate, AccountId FROM Opportunities)FROM Account WHERE Id = :accountId WITH SECURITY_ENFORCED LIMIT 1]);
+
+		Account singleAccount = accountById.get(accountId);
+
+		return singleAccount; // Replace null with the variable you used to store the result
 	}
 
 	/**
