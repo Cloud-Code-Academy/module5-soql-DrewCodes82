@@ -391,11 +391,13 @@ public with sharing class SOQL {
 	 */
 	public static List<Contact> getAccountsWithContactsByState(Id accountId) {
 		// Query the Account
-
+		Account acc = [SELECT Id, Name, BillingState FROM Account WHERE Id = :accountId WITH SECURITY_ENFORCED LIMIT 1];
 		// Store the Account's BillingState
-
+		String accBillingState = '%' + acc.BillingState + '%';
 		// Query the Contacts
-		return null; // Replace null with the variable you used to store the result
+		List<Contact> contacts = [SELECT Id, Name, FirstName, LastName, MailingState FROM Contact WHERE MailingState LIKE :accBillingState WITH SECURITY_ENFORCED];
+
+		return contacts; // Replace null with the variable you used to store the result
 	}
 
 	/**
