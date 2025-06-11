@@ -441,17 +441,36 @@ public with sharing class SOQL {
 	 */
 	public static void cloneLineItems(Id origOppId, List<Id> cloneOppIds) {
 		// Query the original Opportunity Line Items
-
+		List<OpportunityLineItem> originalOLIs = [
+			SELECT PricebookEntryId, Quantity, UnitPrice, OpportunityId
+			FROM OpportunityLineItem
+			WHERE OpportunityId = :origOppId
+			WITH SECURITY_ENFORCED
+		];
 		// Create a list to hold the new line items
-
-		// Generate a random number between 1 and 3
-
+		List<OpportunityLineItem> newOLIs = new List<OpportunityLineItem>();
+		
 		// Loop through each cloned Opportunity Id
+		for (Id cloneOppId : cloneOppIds) {
+			// Loop through each original line item
+			for (OpportunityLineItem oli : originalOLIs) {
+				// Generate a random number between 1 and 3
+				Integer randomQty = Math.round(Math.random() * 2) + 1;
 
-		// Loop through each original line item
+				// Clone the original line item and add the random number to the quantity
+				OpportunityLineItem newOli = new OpportunityLineItem();
+				newOli.PricebookEntryId = oli.PricebookEntryId;
+				newOli.Quantity = oli.Quantity + randomQty;
+				newOli.UnitPrice = oli.UnitPrice;
+				newOli.OpportunityId = cloneOppId;
 
-		// Clone the original line item and add the random number to the quantity
+				newOLIs.add(newOli);
 
+			}
+		}
+		if (Schema.sObjectType.OpportunityLineItem.isCreateable()) {
+			insert newOLIs;
+		}
 		// Insert the new line items
 	}
 
